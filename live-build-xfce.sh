@@ -30,7 +30,7 @@ check_command apt-cache
 check_command awk
 
 # Crear directorio de trabajo
-WORK_DIR="./live-build-bookworm"
+WORK_DIR="./live-build-xfce"
 if [ -d "$WORK_DIR" ]; then
   log_info "El directorio de trabajo '$WORK_DIR' ya existe. Se eliminará."
   rm -rf "$WORK_DIR"
@@ -89,7 +89,6 @@ log_info "Configurando paquetes..."
 cat > config/package-lists/paquetes.list.chroot << 'EOF'
 adb
 attr
-audacity
 avahi-daemon
 avahi-utils
 bash-completion
@@ -120,13 +119,11 @@ fonts-noto-cjk
 fonts-recommended
 fonts-texgyre
 gallery-dl
-gimp
 git
 gnome-disk-utility
 gnome-font-viewer
 gparted
 hplip-gui
-inkscape
 intel-microcode
 iputils-ping
 keepassxc
@@ -144,7 +141,6 @@ nano
 neofetch
 network-manager-gnome
 nmap
-obs-studio
 opus-tools
 p7zip-full
 papirus-icon-theme
@@ -153,7 +149,6 @@ powertop
 printer-driver-all-enforce
 pulseaudio
 pulseaudio-module-bluetooth
-qbittorrent
 samba
 samba-ad-provision
 samba-dsdb-modules
