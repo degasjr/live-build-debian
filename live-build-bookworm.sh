@@ -5,21 +5,6 @@ set -e
 # Variables
 DISTRIBUTION="bookworm" # Debian 12
 
-# Paquetes del núcleo y módulos
-KERNEL_PACKAGES="linux-image-amd64 firmware-linux-free firmware-iwlwifi"
-
-# Paquetes del escritorio
-DESKTOP_PACKAGES="xfce4 xfce4-terminal xfce4-goodies xfce4-power-manager lightdm network-manager-gnome wireless-tools bluetooth pulseaudio pulseaudio-module-bluetooth fonts-recommended fonts-dejavu fonts-noto-cjk dmz-cursor-theme"
-
-# Paquetes de localización
-LANG_PACKAGES="task-spanish"
-
-# Paquetes adicionales
-CMD_PACKAGES="bash-completion command-not-found shellcheck shfmt sudo nano git iputils-ping wget whois nmap curl ssh sox flac opus-tools ffmpeg samba smbclient winbind cifs-utils cups printer-driver-all parallel gallery-dl minidlna swh-plugins webp woff2 fatattr powertop adb fastboot chntpw testdisk thermald cpufrequtils btop neofetch"
-
-# Paquetes gráficos adicionales
-GUI_PACKAGES="synaptic gnome-disk-utility gparted firefox-esr firefox-esr-l10n-es-mx libreoffice-calc libreoffice-impress libreoffice-writer libreoffice-draw libreoffice-l10n-es libreoffice-gtk3 myspell-es system-config-printer hplip-gui simple-scan gimp inkscape vlc vlc-l10n obs-studio audacity qbittorrent keepassxc metadata-cleaner gnome-font-viewer goldendict goldendict-wordnet"
-
 # Funciones
 log_info() {
   echo "[INFO] $1"
@@ -36,7 +21,7 @@ check_command() {
   fi
 }
 
-# 1. Verificar dependencias
+# Verificar dependencias
 log_info "Verificando dependencias..."
 check_command live-build
 check_command sudo
@@ -44,7 +29,7 @@ check_command debootstrap
 check_command apt-cache
 check_command awk
 
-# 2. Crear directorio de trabajo
+# Crear directorio de trabajo
 WORK_DIR="./live-build-bookworm"
 if [ -d "$WORK_DIR" ]; then
   log_info "El directorio de trabajo '$WORK_DIR' ya existe. Se eliminará."
@@ -53,17 +38,20 @@ fi
 mkdir -p "$WORK_DIR"
 cd "$WORK_DIR"
 
-# 3. Inicializar la configuración de live-build
+# Inicializar la configuración de live-build
 log_info "Inicializando la configuración de live-build..."
 lb config \
+  --apt-indices false \
+  --apt-recommends false \
   --apt-source-archives false \
   --architecture "amd64" \
   --archive-areas "main non-free-firmware" \
   --backports false \
-  --bootappend-live "boot=live components locales=es_VE.UTF-8 keyboard-layouts=es timezone=America/Caracas live-config.username=usuario live-config.user-fullname='Usuario Debian en vivo'" \
+  --bootappend-live "boot=live components locales=es_VE.UTF-8 keyboard-layouts=es,us timezone=America/Caracas live-config.username=usuario live-config.user-fullname=Usuario" \
   --clean \
   --debian-installer live \
-  --debian-installer-distribution "$DISTRIBUTION"\
+  --debian-installer-distribution "$DISTRIBUTION" \
+  --debootstrap-options "--variant=minbase" \
   --distribution "$DISTRIBUTION" \
   --iso-application "Debian GNU/Linux - En Vivo" \
   --iso-publisher "Alexis Adam; https://github.com/degasjr" \
@@ -71,28 +59,148 @@ lb config \
   --updates false \
   --win32-loader false
 
-# 4. Configurar paquetes
-log_info "Configurando paquetes..."
-echo "$KERNEL_PACKAGES" >> config/package-lists/kernel.list.chroot
-echo "$DESKTOP_PACKAGES" >> config/package-lists/desktop.list.chroot
-echo "$LANG_PACKAGES" >> config/package-lists/lang.list.chroot
-echo "$CMD_PACKAGES" >> config/package-lists/cmd.list.chroot
-echo "$GUI_PACKAGES" >> config/package-lists/gui.list.chroot
+# Crear estructura de directorios para personalizaciones
+mkdir -p config/includes.chroot/usr/share/backgrounds/
+mkdir -p config/includes.chroot/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/
 
-# 5. Construir la imagen ISO
+# Copiar imagen local para establecerla como fondo de pantalla personalizado
+cp /home/usuario/fondo.svg config/includes.chroot/usr/share/backgrounds/
+
+# Crear archivo de configuración para el fondo de pantalla
+cat > config/includes.chroot/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml << 'EOF'
+<?xml version="1.0" encoding="UTF-8"?>
+
+<channel name="xfce4-desktop" version="1.0">
+  <property name="backdrop" type="empty">
+    <property name="screen0" type="empty">
+      <property name="monitor0" type="empty">
+        <property name="image-path" type="string" value="/usr/share/backgrounds/fondo.svg"/>
+        <property name="image-style" type="int" value="5"/>
+        <property name="image-show" type="bool" value="true"/>
+      </property>
+    </property>
+  </property>
+</channel>
+EOF
+
+# Configurar paquetes
+log_info "Configurando paquetes..."
+
+cat > config/package-lists/paquetes.list.chroot << 'EOF'
+adb
+attr
+audacity
+avahi-daemon
+avahi-utils
+bash-completion
+bluetooth
+btop
+chntpw
+cifs-utils
+colord
+command-not-found
+cpufrequtils
+cups
+curl
+debian-installer-launcher
+dmz-cursor-theme
+fastboot
+fatattr
+ffmpeg
+firefox-esr
+firefox-esr-l10n-es-mx
+firmware-iwlwifi
+firmware-linux-free
+flac
+fonts-dejavu
+fonts-droid-fallback
+fonts-font-awesome
+fonts-liberation2
+fonts-noto-cjk
+fonts-recommended
+fonts-texgyre
+gallery-dl
+gimp
+git
+gnome-disk-utility
+gnome-font-viewer
+gparted
+hplip-gui
+inkscape
+intel-microcode
+iputils-ping
+keepassxc
+libreoffice-calc
+libreoffice-draw
+libreoffice-gtk3
+libreoffice-impress
+libreoffice-l10n-es
+libreoffice-writer
+linux-image-amd64
+metadata-cleaner
+minidlna
+myspell-es
+nano
+neofetch
+network-manager-gnome
+nmap
+obs-studio
+opus-tools
+p7zip-full
+papirus-icon-theme
+parallel
+powertop
+printer-driver-all-enforce
+pulseaudio
+pulseaudio-module-bluetooth
+qbittorrent
+samba
+samba-ad-provision
+samba-dsdb-modules
+samba-vfs-modules
+shellcheck
+shfmt
+simple-scan
+smbclient
+sox
+ssh
+sudo
+swh-plugins
+synaptic
+system-config-printer
+system-config-printer-udev
+task-spanish
+task-xfce-desktop
+testdisk
+thermald
+thunar-volman
+user-setup
+vlc
+vlc-l10n
+webp
+wget
+whois
+winbind
+wireless-tools
+woff2
+wspanish
+xarchiver
+xfce4-goodies
+xfce4-power-manager
+xfce4-power-manager-plugins
+xfce4-terminal
+EOF
+
+# Construir la imagen ISO
 log_info "Construyendo la imagen ISO. Esto puede tardar un tiempo..."
 sudo lb build
 
-# 6. Finalización
+# Finalización
 if [ -f "live-image-amd64.hybrid.iso" ]; then
-  ISO_PATH=$(find live-image-amd64.hybrid.iso -type f)
-  log_info "¡La imagen ISO se ha creado exitosamente en: $ISO_PATH!"
-  log_info "Puedes usar esta imagen para crear un USB booteable o una máquina virtual."
+  log_info "La imagen ISO se ha creado exitosamente en: $(pwd)/live-image-amd64.hybrid.iso"
 else
   log_error "¡Error al construir la imagen ISO!"
 fi
 
 cd ..
-log_info "Limpiando el directorio de trabajo '$WORK_DIR'..."
-# rm -rf "$WORK_DIR" # Descomenta esta línea para eliminar el directorio de trabajo después
 log_info "¡Proceso completado!"
