@@ -51,7 +51,6 @@ lb config \
   --clean \
   --debian-installer none \
   --debian-installer-distribution "$DISTRIBUTION" \
-  --debootstrap-options "--variant=minbase" \
   --distribution "$DISTRIBUTION" \
   --iso-application "Debian GNU/Linux - En Vivo" \
   --iso-publisher "Alexis Adam; https://github.com/degasjr" \
@@ -102,6 +101,8 @@ cpufrequtils
 cups
 curl
 dmz-cursor-theme
+dnsmasq-base
+dns-root-data
 fastboot
 fatattr
 ffmpeg
@@ -125,6 +126,7 @@ gparted
 hplip-gui
 intel-microcode
 iputils-ping
+iso-codes
 keepassxc
 libreoffice-calc
 libreoffice-draw
@@ -135,14 +137,16 @@ libreoffice-writer
 linux-image-amd64
 metadata-cleaner
 minidlna
+mobile-broadband-provider-info
+modemmanager
 myspell-es
 nano
 neofetch
 network-manager-gnome
 nmap
+notification-daemon
 opus-tools
 p7zip-full
-papirus-icon-theme
 parallel
 powertop
 printer-driver-all-enforce
@@ -168,6 +172,7 @@ task-xfce-desktop
 testdisk
 thermald
 thunar-volman
+usb-modeswitch
 user-setup
 vlc
 vlc-l10n
@@ -175,8 +180,10 @@ webp
 wget
 whois
 winbind
+wireless-regdb
 wireless-tools
 woff2
+wpasupplicant
 wspanish
 xarchiver
 xfce4-goodies
