@@ -49,7 +49,7 @@ lb config \
   --backports false \
   --bootappend-live "boot=live components locales=es_VE.UTF-8 keyboard-layouts=es,us timezone=America/Caracas live-config.username=usuario live-config.user-fullname=Usuario" \
   --clean \
-  --debian-installer live \
+  --debian-installer none \
   --debian-installer-distribution "$DISTRIBUTION" \
   --debootstrap-options "--variant=minbase" \
   --distribution "$DISTRIBUTION" \
@@ -101,7 +101,6 @@ command-not-found
 cpufrequtils
 cups
 curl
-debian-installer-launcher
 dmz-cursor-theme
 fastboot
 fatattr
