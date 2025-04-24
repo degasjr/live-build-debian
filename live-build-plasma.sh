@@ -102,6 +102,7 @@ flac
 fonts-croscore
 fonts-crosextra-caladea
 fonts-crosextra-carlito
+fonts-font-awesome
 fonts-freefont-otf
 fonts-hack
 fonts-liberation
