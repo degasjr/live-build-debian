@@ -123,7 +123,7 @@ git
 gnome-disk-utility
 gnome-font-viewer
 gparted
-hplip-gui
+hplip
 intel-microcode
 iputils-ping
 iso-codes
