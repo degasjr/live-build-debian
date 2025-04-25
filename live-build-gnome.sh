@@ -30,7 +30,7 @@ check_command apt-cache
 check_command awk
 
 # Crear directorio de trabajo
-WORK_DIR="./live-build-xfce"
+WORK_DIR="./live-build-gnome"
 if [ -d "$WORK_DIR" ]; then
   log_info "El directorio de trabajo '$WORK_DIR' ya existe. Se eliminará."
   rm -rf "$WORK_DIR"
@@ -58,30 +58,6 @@ lb config \
   --updates false \
   --win32-loader false
 
-# Crear estructura de directorios para personalizaciones
-mkdir -p config/includes.chroot/usr/share/backgrounds/
-mkdir -p config/includes.chroot/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/
-
-# Copiar imagen local para establecerla como fondo de pantalla personalizado
-cp /home/usuario/fondo.svg config/includes.chroot/usr/share/backgrounds/
-
-# Crear archivo de configuración para el fondo de pantalla
-cat > config/includes.chroot/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml << 'EOF'
-<?xml version="1.0" encoding="UTF-8"?>
-
-<channel name="xfce4-desktop" version="1.0">
-  <property name="backdrop" type="empty">
-    <property name="screen0" type="empty">
-      <property name="monitor0" type="empty">
-        <property name="image-path" type="string" value="/usr/share/backgrounds/fondo.svg"/>
-        <property name="image-style" type="int" value="5"/>
-        <property name="image-show" type="bool" value="true"/>
-      </property>
-    </property>
-  </property>
-</channel>
-EOF
-
 # Configurar paquetes
 log_info "Configurando paquetes..."
 
@@ -90,10 +66,13 @@ adb
 attr
 avahi-daemon
 avahi-utils
+baobab
 bash-completion
+bleachbit
 bluetooth
 btop
 ca-certificates
+cheese
 chntpw
 cifs-utils
 colord
@@ -101,17 +80,25 @@ command-not-found
 cpufrequtils
 cups
 curl
+deja-dup
 dmz-cursor-theme
 dnsmasq-base
 dns-root-data
+dosfstools
+e2fsprogs
+eject
+eog
 epiphany-browser
 evince
+exfatprogs
 fastboot
 fatattr
 ffmpeg
+file-roller
 firmware-iwlwifi
 firmware-linux-free
 flac
+foliate
 fonts-croscore
 fonts-crosextra-caladea
 fonts-crosextra-carlito
@@ -128,36 +115,53 @@ fonts-unifont
 fonts-urw-base35
 gallery-dl
 git
-gnome-disk-utility
+gnome-calendar
+gnome-chess
+gnome-clocks
+gnome-color-manager
+gnome-core
+gnome-firmware
+gnome-flashback
+gnome-icon-theme
+gnome-keyring
+gnome-keyring-pkcs11
+gnome-power-manager
+gnome-screenshot
+gnome-session-flashback
+gnome-tweaks
 gparted
+gvfs-backends
 hplip
 intel-microcode
 iputils-ping
 keepassxc
+libpam-systemd
 libreoffice-calc
 libreoffice-draw
+libreoffice-gnome
 libreoffice-gtk3
 libreoffice-impress
 libreoffice-l10n-es
 libreoffice-writer
 linux-image-amd64
+low-memory-monitor
 metadata-cleaner
 minidlna
 mobile-broadband-provider-info
 modemmanager
 myspell-es
 nano
+nautilus
 neofetch
 network-manager-gnome
 nmap
 notification-daemon
+ntfs-3g
 opus-tools
-p7zip-full
 parallel
+planner
 powertop
 printer-driver-all-enforce
-pulseaudio
-pulseaudio-module-bluetooth
 samba
 samba-ad-provision
 samba-dsdb-modules
@@ -170,15 +174,12 @@ smbclient
 sox
 ssh
 sudo
-swh-plugins
 synaptic
-system-config-printer
+system-config-printer-common
 system-config-printer-udev
 task-spanish
-task-xfce-desktop
 testdisk
 thermald
-thunar-volman
 usb-modeswitch
 user-setup
 vlc
@@ -192,11 +193,7 @@ wireless-tools
 woff2
 wpasupplicant
 wspanish
-xarchiver
-xfce4-goodies
-xfce4-power-manager
-xfce4-power-manager-plugins
-xfce4-terminal
+yelp
 EOF
 
 # Construir la imagen ISO

@@ -89,13 +89,12 @@ dosfstools
 e2fsprogs
 eject
 exfatprogs
+falkon
 fastboot
 fatattr
 ffmpeg
 ffmpegthumbs
 filelight
-firefox-esr
-firefox-esr-l10n-es-mx
 firmware-iwlwifi
 firmware-linux-free
 flac
@@ -187,6 +186,7 @@ sddm-theme-breeze
 shellcheck
 shfmt
 simple-scan
+smartmontools
 smbclient
 sox
 ssh
