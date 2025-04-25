@@ -114,7 +114,6 @@ fonts-urw-base35
 gallery-dl
 git
 gnome-disk-utility
-gnome-font-viewer
 gparted
 gwenview
 hplip
@@ -149,7 +148,7 @@ libreoffice-l10n-es
 libreoffice-plasma
 libreoffice-writer
 linux-image-amd64
-metadata-cleaner
+mat2
 minidlna
 mobile-broadband-provider-info
 modemmanager

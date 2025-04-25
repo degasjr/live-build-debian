@@ -141,7 +141,6 @@ libreoffice-impress
 libreoffice-l10n-es
 libreoffice-writer
 linux-image-amd64
-metadata-cleaner
 minidlna
 mobile-broadband-provider-info
 modemmanager
